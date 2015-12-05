@@ -1,0 +1,10 @@
+dependencies:
+-  { role: dork.nginx,
+     nginx_webroot: /var/source/dist }
+
+dork:
+  update_triggers:
+  - 'src/**': ['fabricator_build']
+  - 'package.json': ['fabricator_install']
+  build_triggers:
+  - 'gulpfile.js': 'fabricator-assemble'

@@ -1,0 +1,24 @@
+- name: install nodejs yum repositories
+  shell: curl -sL https://rpm.nodesource.com/setup_5.x | bash -
+  args:
+    creates: /etc/yum.repos.d/nodesource-el.repo
+
+- name: install nodejs
+  yum:
+    name: nodejs
+
+- name: install nodejs packages
+  npm:
+    path: /var/source
+  tags:
+  - fabricator_install
+
+- name: rebuild node-sass
+  shell: npm rebuild node-sass
+
+- name: build the toolkit
+  shell: npm run build
+  args:
+    chdir: /var/source
+  tags:
+  - fabricator_build
