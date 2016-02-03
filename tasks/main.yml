@@ -1,3 +1,4 @@
+
 - name: install nodejs yum repositories
   shell: curl -sL https://rpm.nodesource.com/setup_5.x | bash -
   args:
@@ -5,7 +6,36 @@
 
 - name: install nodejs
   yum:
-    name: nodejs
+    name: "{{item}}"
+  with_items:
+  - rsync
+  - nodejs
+
+- name: get stat of /var/web
+  stat:
+    path: /var/web
+  register: dir
+
+- name: remove /var/web if its still a link (default in dork.nginx)
+  file:
+    path: /var/web
+    state: absent
+  when: dir.stat.islnk is defined and dir.stat.islnk
+
+- name: create docroot as real directory
+  file:
+    path: /var/web
+    state: directory
+
+- name: sync code
+  shell: >
+    rsync -ru --delete
+    --exclude=.git
+    --exclude=node_modules
+    --exclude=dist
+    --exclude=bower_packages
+    /var/source/ /var/web/
+  tags: always
 
 - name: install nodejs packages
   npm:
