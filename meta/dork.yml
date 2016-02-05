@@ -1,0 +1,5 @@
+update_triggers:
+- 'src/**': ['fabricator_build']
+- 'package.json': ['fabricator_install']
+build_triggers:
+- 'gulpfile.js': 'fabricator-assemble'
