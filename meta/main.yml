@@ -1,3 +1,3 @@
 dependencies:
 -  { role: dork.nginx,
-     nginx_webroot: /var/source/dist }
+     nginx_webroot: /var/web/dist }

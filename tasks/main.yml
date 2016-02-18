@@ -1,4 +1,3 @@
-
 - name: install nodejs yum repositories
   shell: curl -sL https://rpm.nodesource.com/setup_5.x | bash -
   args:
@@ -10,17 +9,6 @@
   with_items:
   - rsync
   - nodejs
-
-- name: get stat of /var/web
-  stat:
-    path: /var/web
-  register: dir
-
-- name: remove /var/web if its still a link (default in dork.nginx)
-  file:
-    path: /var/web
-    state: absent
-  when: dir.stat.islnk is defined and dir.stat.islnk
 
 - name: create docroot as real directory
   file:
@@ -46,9 +34,13 @@
 - name: rebuild node-sass
   shell: npm rebuild node-sass
 
+- name: bower install
+  bower:
+    path: /var/web
+
 - name: build the toolkit
   shell: npm run build
   args:
-    chdir: /var/source
+    chdir: /var/web
   tags:
   - fabricator_build
