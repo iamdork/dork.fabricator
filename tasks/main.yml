@@ -37,6 +37,11 @@
     /var/source/ /var/web/
   tags: always
 
+- name: install gulp
+  npm:
+    name: gulp
+    global: true
+
 - name: install nodejs packages
   npm:
     path: /var/web
